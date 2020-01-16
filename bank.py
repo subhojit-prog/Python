@@ -1,3 +1,6 @@
+from account import Account
+
+
 class Bank():
     accounts = []
 
@@ -14,25 +17,35 @@ class Bank():
             return False
 
     def accountNoGen(self):
-        x = 10000
+        x = 12345
         for account_no in range(x, 99999):
             if self.isAccountPresent(account_no):
-                x = x+1
-        else:
-            return str(account_no)
+                x += 1
+            else:
+                return str(account_no)
 
-    def addAccount(self, accountsForAdd):
-        self.accounts.append(accountsForAdd)
+    def accountCreate(self, name, amount):
+        account_no = self.accountNoGen()
+        self.accounts.append(Account(account_no, name, amount))
+        return account_no
+
+    def addAccount(self, accountForAdd):
+        self.accounts.append(accountForAdd)
         return self
 
     def accountDetails(self, account_no):
         account = self.getAccount(account_no)
-        return f"{account.customer_name} has balance {account.balance}/- rs"
+        return f"{account.customer_name} has balance {account.balance}/- dinar"
 
-    def depositor(self, account_no, bal_u):
+    def depositor(self, account_no, amount):
         account = self.getAccount(account_no)
+        account.balance += amount
+        return account.balance
 
-        pass
-
-    def withdrawler(self, account_no, bal_u):
-        pass
+    def withdrawler(self, account_no, amount):
+        account = self.getAccount(account_no)
+        if account.balance >= amount:
+            account.balance -= amount
+            return F"\nyour new balance {account.balance}/- Rs \n"
+        else:
+            return "insufficient balance"
